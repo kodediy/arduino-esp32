@@ -56716,6 +56716,33 @@ kodedot.build.defines=-DBOARD_HAS_PSRAM -DKODE_SKETCH_NAME="{build.project_name}
 kodedot.recipe.hooks.objcopy.postobjcopy.3.pattern=
 kodedot.recipe.hooks.objcopy.postobjcopy.3.pattern_args=
 
+# Attach flow and the serverArgs contract: see variants/kodedot/kodedot-debug.cfg.
+# No ESP32-P4 SVD ships with the core: an empty path keeps the IDE from reporting it missing.
+kodedot.debug.svd_file=
+kodedot.debug.server.openocd.scripts.1={build.variant.path}/kodedot-debug.cfg
+kodedot.debug.cortex-debug.custom.name=Arduino on Kode Dot
+kodedot.debug.cortex-debug.custom.serverArgs.0=-c
+kodedot.debug.cortex-debug.custom.serverArgs.1=set ::kodedot_esptool {{tools.esptool_py_app_only.path}/{tools.esptool_py_app_only.cmd}}
+kodedot.debug.cortex-debug.custom.serverArgs.2=-c
+kodedot.debug.cortex-debug.custom.serverArgs.3=set ::kodedot_port {{debug.port}}
+kodedot.debug.cortex-debug.custom.serverArgs.4=-c
+kodedot.debug.cortex-debug.custom.serverArgs.5=set ::kodedot_bin {{build.path}/{build.project_name}.bin}
+kodedot.debug.cortex-debug.custom.serverArgs.6=-c
+kodedot.debug.cortex-debug.custom.serverArgs.7=set ::kodedot_esptool_args {--chip {build.mcu} --baud {upload.speed}}
+kodedot.debug.cortex-debug.custom.serverArgs.8=-c
+kodedot.debug.cortex-debug.custom.serverArgs.9=set ::kodedot_flash_args {--flash-mode {build.flash_mode} --flash-freq {build.flash_freq} --flash-size {build.flash_size} {build.flash_offset}}
+kodedot.debug.cortex-debug.custom.overrideAttachCommands.0=set remote hardware-watchpoint-limit 2
+kodedot.debug.cortex-debug.custom.overrideAttachCommands.1=set remotetimeout 120
+kodedot.debug.cortex-debug.custom.overrideAttachCommands.2=eval "monitor kodedot_arm 0x%x", &esp_app_desc
+kodedot.debug.cortex-debug.custom.overrideAttachCommands.3=monitor reset halt
+kodedot.debug.cortex-debug.custom.overrideAttachCommands.4=monitor gdb sync
+kodedot.debug.cortex-debug.custom.overrideAttachCommands.5=thb setup
+kodedot.debug.cortex-debug.custom.overrideAttachCommands.6=c
+kodedot.debug.cortex-debug.custom.overrideRestartCommands.0=monitor reset halt
+kodedot.debug.cortex-debug.custom.overrideRestartCommands.1=monitor gdb sync
+kodedot.debug.cortex-debug.custom.overrideRestartCommands.2=thb setup
+kodedot.debug.cortex-debug.custom.overrideRestartCommands.3=c
+
 kodedot.menu.DebugLevel.none=None
 kodedot.menu.DebugLevel.none.build.code_debug=0
 kodedot.menu.DebugLevel.error=Error
